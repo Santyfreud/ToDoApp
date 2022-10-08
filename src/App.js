@@ -7,12 +7,12 @@ import { CreateButton } from "./CreateButton";
 //import './App.css';
 
 const toDos = [
-  { text: "Learn HTML5 and CSS3", completed: false },
-  { text: "Learn JavaScript Fundamentals", completed: false },
+  { text: "Learn HTML5 and CSS3", completed: true },
+  { text: "Learn JavaScript Fundamentals", completed: true },
   { text: "Learn React.js", completed: false },
   { text: "Develop a ToDo web app", completed: false },
   { text: "Succesfully complete de Intro Java Dev Course", completed: false },
-  { text: "Let´s rock the world!", completed: false },
+  { text: "Let´s rock the world!", completed: true },
 ];
 
 function App(props) {
@@ -25,7 +25,11 @@ function App(props) {
       <Search />
       <TodoList>
         {toDos.map(toDo => (
-          <TodoItem key={toDo.text} text={toDo.text}/>
+          <TodoItem
+            key={toDo.text} 
+            text={toDo.text}
+            complete={toDo.completed}
+          />
         ))}
       </TodoList>
       <CreateButton />
