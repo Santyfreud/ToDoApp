@@ -2,10 +2,10 @@ import React from "react";
 import './Counter.css';
 
 
-function Counter() {
+function Counter({ total, completed }) {
     //Adding a className to the elements allow us to import css files into the components:
     return (
-        <h2 className="Counter">Just completed 2 out of 3 ToDos</h2>
+        <h2 className="Counter">Just completed {completed} out of {total} ToDos</h2>
     )
 };
 
