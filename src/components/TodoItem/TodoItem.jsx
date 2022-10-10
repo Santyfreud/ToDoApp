@@ -3,19 +3,11 @@ import './TodoItem.css';
 
 function TodoItem(props) {
 
-    const onComplete = () => {
-        alert(`ToDo "${props.text}" has already been completed`);
-    }
-
-    const onDelete = () => {
-        alert(`You have deleted toDo "${props.text}"`);
-    }
-
     return (
         <li className="TodoItem">
             <span
                 className={`Icon Icon-check ${props.completed && 'Icon-check--active'}`}
-                onClick={onComplete}
+                onClick={props.onComplete}
             >
 
                 ✓
@@ -26,7 +18,7 @@ function TodoItem(props) {
             </p>
             <span
                 className="Icon Icon-delete"
-                onClick={onDelete}
+                onClick={props.onDelete}
             >
 
                 X
