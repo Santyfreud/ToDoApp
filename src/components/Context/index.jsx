@@ -14,6 +14,8 @@ function ToDoProvider(props) {
   } = useLocalStorage('TODOS_V2', []);
   //State declaration for Search component:
   const [searchValue, setSearchValue] = React.useState('');
+  //Modal state management:
+  const [openModal, setOpenModal] = React.useState(false);
   //Completed ToDo´s counter:
   const completedToDos = toDos.filter(toDo => !!toDo.completed).length;
   //Total ToDo´s counter:
@@ -29,6 +31,15 @@ function ToDoProvider(props) {
       const searchText = searchValue.toLowerCase();
       return toDoText.includes(searchText);
     });
+  }
+
+  const addToDo = (text) => {
+    const newToDos = [...toDos];
+    newToDos.push({
+        completed: false,
+        text
+    })
+    saveToDos(newToDos);
   }
 
   const completeToDo = (text) => {
@@ -56,7 +67,10 @@ function ToDoProvider(props) {
             completeToDo,
             deleteToDo,
             loading,
-            error
+            error,
+            openModal,
+            setOpenModal,
+            addToDo
         }}>
             {props.children}
         </ToDoContext.Provider>

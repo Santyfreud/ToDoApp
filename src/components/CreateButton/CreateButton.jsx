@@ -1,16 +1,16 @@
 import React from "react";
 import './CreateButton.css';
 
-function CreateButton() {
+function CreateButton(props) {
 
-    const onClickButton = (msg) => {
-        alert(msg);
+    const onClickButton = () => {
+        props.setOpenModal(previousState => !previousState);
     }
 
     return (
         <button
             className="CreateButton"
-            onClick={() => onClickButton("Modal should be opened here")}
+            onClick={onClickButton}
         >
 
             +
