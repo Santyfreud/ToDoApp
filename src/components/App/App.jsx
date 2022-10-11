@@ -15,30 +15,56 @@ import { AppUI } from "./AppUI";
 //Custom hooks must be invoked into either components or other custom hooks;
 //no invoke them into normal functions 
 function useLocalStorage(itemName, initialValue) {
-  //Handle stored Todo´s:
-  const localStorageItem = localStorage.getItem(itemName);
-  let parsedItem;
-      
-  if(!localStorageItem) {
-    localStorage.setItem(itemName, JSON.stringify(initialValue));
-    parsedItem = initialValue;
-  } else {
-    parsedItem = JSON.parse(localStorageItem);
-  };
 
-  //State declaration for Set ToDos:
-  const [item, setItem] = React.useState(parsedItem);
+  //Let´s simulate the performance when requesting an API:
+  //Creat states for "loading" and "error" status:
+  const[error, setError] = React.useState(false);
+  const[loading, setLoading] = React.useState(true);
+  //State declaration to take advantage of useLocalStorage Hook:
+  const[item, setItem] = React.useState(initialValue);
+
+  //Implementing useEffect() Hook:
+  React.useEffect(() => {
+    //Simulating load delay:
+    setTimeout(() => {
+      //Managing errors through try-catch:
+      try {
+        //Handle stored Todo´s:
+        const localStorageItem = localStorage.getItem(itemName);
+        let parsedItem;
+            
+        if(!localStorageItem) {
+          localStorage.setItem(itemName, JSON.stringify(initialValue));
+          parsedItem = initialValue;
+        } else {
+          parsedItem = JSON.parse(localStorageItem);
+        };
+        setItem(parsedItem);
+      } catch(error) {
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    }, 2000);
+  });
 
   const saveItem = (newItem) => {
-    const stringifiedItem = JSON.stringify(newItem);
-    localStorage.setItem(itemName, stringifiedItem);
-    setItem(newItem);
+    try {
+      const stringifiedItem = JSON.stringify(newItem);
+      localStorage.setItem(itemName, stringifiedItem);
+      setItem(newItem);
+    } catch {
+      setError(error);
+    }
   };
 
-  return [
+  //We can return objetcs instead of arrays when have much return data:
+  return {
     item,
-    saveItem
-  ];
+    saveItem,
+    loading,
+    error
+  };
 
 }
 
@@ -47,8 +73,12 @@ function App(props) {
   // React Elements are different than html tags
 
   //States:
-  //State declaration to take advantage of useLocalStorage Hook:
-  const[toDos, saveToDos] = useLocalStorage('TODOS_V2', []);
+  const {
+    item: toDos,
+    saveItem: saveToDos,
+    loading,
+    error
+  } = useLocalStorage('TODOS_V2', []);
   //State declaration for Search component:
   const [searchValue, setSearchValue] = React.useState('');
   //Completed ToDo´s counter:
@@ -92,6 +122,8 @@ function App(props) {
       searchedToDos={searchedToDos}
       completeToDo={completeToDo}
       deleteToDo={deleteToDo}
+      loading={loading}
+      error={error}
     />
   );
 }
